@@ -14,7 +14,7 @@ import sys
 from pathlib import Path
 
 path = Path(sys.argv[1] if len(sys.argv) > 1 else "dist/index.html")
-html = path.read_text(encoding="utf-8")
+html = path.read_bytes().decode("utf-8")
 
 # <script ...>conteúdo</script> sem atributo src = script inline
 hashes = []
@@ -51,5 +51,5 @@ new_html, n = re.subn(r"(<head[^>]*>)", lambda m: m.group(1) + "\n    " + tag, h
 if n != 1:
     sys.exit("Não achei <head> no index.html.")
 
-path.write_text(new_html, encoding="utf-8")
+path.write_bytes(new_html.encode("utf-8"))
 print(f"CSP gravada em {path} com {len(hashes)} hash(es) de script inline.")

@@ -1,27 +1,22 @@
 {
   "name": "ctf_-",
-  "tag": "<Dev beckend/app>",
-  "bio": "Programo em Rust, Python e C/C++, java. Crio ferramentas, sites e projetos de sistemas no Linux.",
-  "avatar": "/assets/logo.jpg",
+  "tag": "<Dev backend/app>",
+  "bio": "Programo em Rust, Python, C/C++, Java. Crio ferramentas, sites e projetos de sistemas no Linux.",
+  "avatar": "assets/logo.jpg",
 
-  "techs": ["Rust", "Python", "C/C++", "java", "Linux"],
+  "techs": ["Rust", "Python", "C/C++", "Java", "Linux"],
 
   "socials": [
-    { "label": "Instagram", "icon": "instagram", "url": "https://instagram.com/ctf_-" },
+    { "label": "Instagram", "icon": "instagram", "url": "https://www.instagram.com/ctf_y090/" },
     { "label": "TikTok",    "icon": "tiktok",    "url": "https://tiktok.com/@ctf_-" },
-    { "label": "YouTube",   "icon": "youtube",   "url": "https://youtube.com/@seu_canal" },
-    { "label": "GitHub",    "icon": "github",    "url": "https://github.com/seu-usuario" },
-    { "label": "X",         "icon": "x",         "url": "https://x.com/seu_usuario" }
+    { "label": "GitHub",    "icon": "github",    "url": "https://github.com/ctfufx777-bit" }
   ],
 
   "links": [
-    { "title": "Projetos no GitHub", "desc": "Código aberto e experimentos",        "url": "https://github.com/seu-usuario" },
-    { "title": "Portfólio",          "desc": "Sites e sistemas que já construí",    "url": "https://exemplo.com/portfolio" },
-    { "title": "Canal no YouTube",   "desc": "Vídeos e tutoriais",                  "url": "https://youtube.com/@seu_canal" },
-    { "title": "Contato",            "desc": "Vamos conversar sobre o seu projeto", "url": "mailto:voce@exemplo.com" }
+    { "title": "Projetos no GitHub", "desc": "Código aberto e experimentos", "url": "https://github.com/ctfufx777-bit" }
   ],
 
-  "command": "git clone https://github.com/seu-usuario/seu-repo.git",
+  "command": "git clone https://github.com/ctfufx777-bit/ctf-dev-hub.git",
 
   "spotify_playlist_id": "008G1BbvK1NQvbAV8MHvDz",
 

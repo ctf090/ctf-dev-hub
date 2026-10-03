@@ -5,7 +5,7 @@
 use serde::Deserialize;
 
 /// Caminho do arquivo de configuração (dentro de assets/).
-pub const CONFIG_URL: &str = "/assets/config.json";
+pub const CONFIG_URL: &str = "assets/config.json";
 
 #[derive(Clone, Debug, Default, Deserialize)]
 #[serde(default)]
@@ -55,10 +55,11 @@ pub fn safe_url(raw: &str) -> String {
     }
 }
 
-/// Imagem local (/assets/...) ou https. Evita esquemas estranhos e "//outro-site".
+/// Imagem local (caminho relativo ou /assets/...) ou https. Rejeita esquemas estranhos
+/// (javascript:, data:...), "//outro-site" e "..".
 pub fn safe_asset(raw: &str) -> String {
     let u = raw.trim();
-    let local = u.starts_with('/') && !u.starts_with("//") && !u.contains("..");
+    let local = !u.is_empty() && !u.contains(':') && !u.starts_with("//") && !u.contains("..");
     if local || u.to_ascii_lowercase().starts_with("https://") {
         u.to_string()
     } else {

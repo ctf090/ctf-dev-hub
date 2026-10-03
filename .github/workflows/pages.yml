@@ -1,0 +1,63 @@
+# Compila o site (Rust -> WebAssembly com Trunk) e publica no GitHub Pages.
+name: Deploy no GitHub Pages
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Rust + alvo WebAssembly
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+
+      - name: Cache das dependências
+        uses: Swatinem/rust-cache@v2
+
+      - name: Instalar Trunk
+        run: |
+          curl --proto '=https' --tlsv1.2 -sSfL \
+            https://github.com/trunk-rs/trunk/releases/latest/download/trunk-x86_64-unknown-linux-gnu.tar.gz \
+            | tar -xzf -
+          ./trunk --version
+
+      - name: Compilar
+        run: ./trunk build --release --locked --public-url "/${{ github.event.repository.name }}/"
+
+      - name: Aplicar CSP
+        run: python3 scripts/add-csp.py dist/index.html
+
+      - name: Configurar Pages
+        uses: actions/configure-pages@v5
+
+      - name: Enviar pasta dist
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Publicar
+        id: deployment
+        uses: actions/deploy-pages@v5
