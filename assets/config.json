@@ -7,11 +7,9 @@
   "techs": ["Rust", "Python", "C/C++", "Java", "Linux"],
 
   "socials": [
-    { "label": "Instagram", "icon": "instagram", "url": " https://www.instagram.com/ctf_y090/" },
-    { "label": "TikTok",    "icon": "tiktok",    "url": "" },
-    { "label": "GitHub",    "icon": "github",    "url": "https://github.com/ctfufx777-bit" }
+  { "label": "Instagram", "icon": "instagram", "url": "https://www.instagram.com/ctf_y090/" },
+  { "label": "GitHub",    "icon": "github",    "url": "https://github.com/ctfufx777-bit" }
   ],
-
   "links": [
     { "title": "Projetos no GitHub", "desc": "Código aberto e experimentos", "url": "https://github.com/ctfufx777-bit" }
   ],
