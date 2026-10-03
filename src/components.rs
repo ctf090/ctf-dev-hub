@@ -333,8 +333,6 @@ pub fn SpotifyEmbed(playlist_id: String, i: usize) -> impl IntoView {
                 src=src
                 title="Playlist no Spotify"
                 height="352"
-                loading="lazy"
-                referrerpolicy="strict-origin-when-cross-origin"
                 allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
             ></iframe>
         </Window>
