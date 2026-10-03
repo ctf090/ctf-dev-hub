@@ -7,8 +7,8 @@
   "techs": ["Rust", "Python", "C/C++", "Java", "Linux"],
 
   "socials": [
-    { "label": "Instagram", "icon": "instagram", "url": "https://www.instagram.com/ctf_y090/" },
-    { "label": "TikTok",    "icon": "tiktok",    "url": "https://tiktok.com/@ctf_-" },
+    { "label": "Instagram", "icon": "instagram", "url": " https://www.instagram.com/ctf_y090/" },
+    { "label": "TikTok",    "icon": "tiktok",    "url": "" },
     { "label": "GitHub",    "icon": "github",    "url": "https://github.com/ctfufx777-bit" }
   ],
 
