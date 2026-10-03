@@ -7,12 +7,12 @@
   "techs": ["Rust", "Python", "C/C++", "Java", "Linux"],
 
   "socials": [
-  { "label": "Instagram", "icon": "instagram", "url": "https://www.instagram.com/ctf_y090/" },
+  { "label": "Instagram", "icon": "instagram", "url": "https://www.instagram.com/ctf.dev/" },
   { "label": "GitHub",    "icon": "github",    "url": "https://github.com/ctf090" }
   ],
   "links": [
   { "title": "Projetos no GitHub", "desc": "Código aberto e experimentos", "url": "https://github.com/ctf090" },
-  { "title": "Instagram", "desc": "Me segue por lá", "url": "https://www.instagram.com/ctf_y090/"  }
+  { "title": "Instagram", "desc": "Me segue por lá", "url": "https://www.instagram.com/ctf.dev/"  }
   ],
 
   "command": "git clone https://github.com/ctf090/ctf-dev-hub.git",
