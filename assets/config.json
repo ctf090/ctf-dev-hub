@@ -8,10 +8,10 @@
 
   "socials": [
   { "label": "Instagram", "icon": "instagram", "url": "https://www.instagram.com/ctf_y090/" },
-  { "label": "GitHub",    "icon": "github",    "url": "https://github.com/ctfufx777-bit" }
+  { "label": "GitHub",    "icon": "github",    "url": "https://github.com/ctf090" }
   ],
   "links": [
-  { "title": "Projetos no GitHub", "desc": "Código aberto e experimentos", "url": "https://github.com/ctfufx777-bit" },
+  { "title": "Projetos no GitHub", "desc": "Código aberto e experimentos", "url": "https://github.com/ctf090" },
   { "title": "Instagram", "desc": "Me segue por lá", "url": "https://www.instagram.com/ctf_y090/"  }
   ],
 
