@@ -1,0 +1,480 @@
+/* ============================================================
+   PALETA (tirada da logo) — troque as cores aqui
+   ============================================================ */
+:root {
+  --bg: #0a0a0a;
+  --red: #ED2024;
+  --orange: #FF7A00;
+  --accent: #FF4B23;
+  --white: #FFFFFF;
+  --gray: #b5b5b5;
+  --card: rgba(22, 22, 24, 0.72);
+  --border: rgba(255, 255, 255, 0.09);
+  --grad: linear-gradient(90deg, #ED2024, #FF7A00);
+  --radius: 14px;
+  --font: "Inter", "Poppins", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+
+  /* bolinhas do macOS */
+  --mac-red: #ff5f57;
+  --mac-yellow: #febc2e;
+  --mac-green: #28c840;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  background: var(--bg);
+  color: var(--white);
+  font-family: var(--font);
+  line-height: 1.5;
+  min-height: 100dvh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Fundo fixo (cover) + overlay escuro. Pseudo-elemento porque
+   background-attachment: fixed é instável no iOS. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+    url("/assets/bg.jpg") center / cover no-repeat;
+}
+
+/* ---------- Fundo animado: luzes à deriva ---------- */
+.orbs { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
+.orb {
+  position: absolute;
+  width: 70vmax;
+  height: 70vmax;
+  border-radius: 50%;
+  will-change: transform;
+}
+.orb-a {
+  top: -30vmax; left: -25vmax;
+  background: radial-gradient(circle, rgba(237, 32, 36, 0.28), transparent 62%);
+  animation: drift-a 24s ease-in-out infinite alternate;
+}
+.orb-b {
+  bottom: -35vmax; right: -25vmax;
+  background: radial-gradient(circle, rgba(255, 122, 0, 0.22), transparent 62%);
+  animation: drift-b 30s ease-in-out infinite alternate;
+}
+@keyframes drift-a { to { transform: translate(35vmax, 25vmax) scale(1.15); } }
+@keyframes drift-b { to { transform: translate(-30vmax, -22vmax) scale(1.1); } }
+
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+/* ---------- Layout: barra lateral + coluna de janelas ---------- */
+.layout {
+  width: 100%;
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 48px 24px 20px;
+  display: grid;
+  grid-template-columns: 340px minmax(0, 1fr);
+  gap: 22px;
+  align-items: start;
+}
+.layout.single { grid-template-columns: minmax(0, 520px); justify-content: center; }
+.sidebar { position: sticky; top: 28px; }
+.content { display: flex; flex-direction: column; gap: 22px; min-width: 0; }
+
+/* ---------- Animação de entrada (sobe + escala, escalonada) ----------
+   fill-mode "backwards": depois de terminar, o hover volta a funcionar. */
+.reveal {
+  animation: rise 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+  animation-delay: min(calc(var(--i, 0) * 110ms), 1200ms);
+}
+@keyframes rise {
+  from { opacity: 0; transform: translateY(26px) scale(0.96); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ============================================================
+   JANELA ESTILO macOS (todos os blocos usam isto)
+   ============================================================ */
+.win {
+  position: relative;
+  overflow: hidden;
+  background: var(--card);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  backdrop-filter: blur(16px) saturate(140%);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+.win:hover {
+  border-color: rgba(255, 122, 0, 0.35);
+  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.55), 0 0 40px rgba(237, 32, 36, 0.12),
+              inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+/* brilho laranja que segue o mouse (--mx/--my vêm do Rust) */
+.win::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.35s;
+  background: radial-gradient(280px circle at var(--mx, 50%) var(--my, 0%),
+              rgba(255, 122, 0, 0.13), transparent 70%);
+}
+.win:hover::before { opacity: 1; }
+
+.win-bar {
+  display: grid;
+  grid-template-columns: 64px 1fr 64px;
+  align-items: center;
+  padding: 11px 14px;
+  background: linear-gradient(rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.03));
+  border-bottom: 1px solid var(--border);
+  user-select: none;
+}
+.lights { display: flex; gap: 8px; }
+.light {
+  position: relative;
+  width: 12px;
+  height: 12px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.15s, filter 0.2s;
+}
+.light.red { background: var(--mac-red); }
+.light.yellow { background: var(--mac-yellow); }
+.light.green { background: var(--mac-green); }
+.light:hover { filter: brightness(1.15); }
+.light:active { transform: scale(0.85); }
+/* símbolo (× − +) aparece ao passar o mouse nas bolinhas, como no Mac */
+.light::after {
+  content: attr(data-sym);
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font: 700 10px/1 var(--font);
+  color: rgba(0, 0, 0, 0.55);
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.lights:hover .light::after { opacity: 1; }
+
+.win-title {
+  text-align: center;
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--gray);
+}
+
+/* minimizar: o corpo encolhe suavemente (grid 1fr → 0fr) */
+.win-body { display: grid; grid-template-rows: 1fr; transition: grid-template-rows 0.4s cubic-bezier(0.3, 0.8, 0.2, 1); }
+.win-inner { min-height: 0; overflow: hidden; transition: opacity 0.3s; }
+.win.min .win-body { grid-template-rows: 0fr; }
+.win.min .win-inner { opacity: 0; }
+.win.min .win-bar { border-bottom-color: transparent; }
+
+.win.shake { animation: shake 0.5s; }
+.win.zoom  { animation: zoom 0.5s cubic-bezier(0.3, 1.4, 0.5, 1); }
+@keyframes shake {
+  0%, 100% { transform: none; }
+  20% { transform: translateX(-8px) rotate(-0.4deg); }
+  40% { transform: translateX(7px) rotate(0.4deg); }
+  60% { transform: translateX(-5px); }
+  80% { transform: translateX(3px); }
+}
+@keyframes zoom {
+  0%, 100% { transform: none; }
+  45% { transform: scale(1.035); }
+}
+
+/* ============================================================
+   BARRA LATERAL: perfil
+   ============================================================ */
+.profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 28px 22px 26px;
+  text-align: center;
+}
+
+/* Logo com anel girando + flutuando */
+.avatar {
+  position: relative;
+  width: 132px;
+  height: 132px;
+  padding: 4px;
+  border-radius: 50%;
+  box-shadow: 0 0 32px rgba(237, 32, 36, 0.35), 0 0 64px rgba(255, 122, 0, 0.18);
+  animation: float 5s ease-in-out infinite, glow 3.5s ease-in-out infinite;
+}
+.avatar::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, #ED2024, #FF7A00, #ffd27a, #FF7A00, #ED2024);
+  animation: spin 4s linear infinite;
+}
+.avatar img {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid var(--bg);
+}
+@keyframes spin  { to { transform: rotate(360deg); } }
+@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
+@keyframes glow {
+  0%, 100% { box-shadow: 0 0 28px rgba(237, 32, 36, 0.3), 0 0 54px rgba(255, 122, 0, 0.14); }
+  50%      { box-shadow: 0 0 44px rgba(237, 32, 36, 0.5), 0 0 84px rgba(255, 122, 0, 0.3); }
+}
+
+/* Nick com brilho passando */
+.name {
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  background: linear-gradient(110deg, #fff 30%, #ffb27a 45%, #FF4B23 50%, #ffb27a 55%, #fff 70%);
+  background-size: 250% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shine 4.5s ease-in-out infinite;
+}
+@keyframes shine {
+  0%   { background-position: 130% 0; }
+  55%, 100% { background-position: -30% 0; }
+}
+
+/* Tag "digitando" + cursor piscando */
+.tag {
+  font-family: var(--mono);
+  font-size: 0.95rem;
+  color: var(--orange);
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: 100%;
+  width: calc(var(--n, 12) * 1ch + 3px);
+  border-right: 2px solid var(--orange);
+  animation: typing 2s steps(var(--n, 12)) 0.9s backwards, blink 0.9s step-end infinite;
+}
+@keyframes typing { from { width: 0; } }
+@keyframes blink  { 50% { border-right-color: transparent; } }
+
+.bio { max-width: 34ch; color: var(--gray); font-size: 0.95rem; }
+
+/* Chips */
+.chips { list-style: none; display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+.chip {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  padding: 6px 12px;
+  border-radius: 999px;
+  color: #e6e6e6;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border);
+  transition: transform 0.25s, border-color 0.25s, color 0.25s;
+  animation: pop 0.5s cubic-bezier(0.3, 1.5, 0.5, 1) backwards;
+  animation-delay: calc(0.9s + var(--i, 0) * 80ms);
+}
+.chip:hover { transform: translateY(-3px); border-color: rgba(255, 122, 0, 0.6); color: var(--orange); }
+@keyframes pop { from { opacity: 0; transform: scale(0.6); } to { opacity: 1; transform: none; } }
+
+/* Ícones sociais */
+.socials { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 4px; }
+.social {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: var(--white);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border);
+  transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s, color 0.25s;
+  animation: pop 0.5s cubic-bezier(0.3, 1.5, 0.5, 1) backwards;
+  animation-delay: calc(1.2s + var(--i, 0) * 80ms);
+}
+.social svg { width: 19px; height: 19px; }
+.social:hover {
+  transform: translateY(-4px) scale(1.08);
+  color: var(--orange);
+  border-color: rgba(255, 75, 35, 0.6);
+  box-shadow: 0 8px 24px rgba(237, 32, 36, 0.32);
+}
+
+/* ============================================================
+   JANELA LINKS
+   ============================================================ */
+.links-list { display: flex; flex-direction: column; padding: 8px; }
+.link-row {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 14px;
+  border-radius: 10px;
+  text-align: left;
+  text-decoration: none;
+  transition: background 0.25s, transform 0.25s;
+  animation: slide-in 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+  animation-delay: calc(0.5s + var(--i, 0) * 90ms);
+}
+/* brilho que atravessa a linha no hover */
+.link-row::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(100deg, transparent 30%, rgba(255, 255, 255, 0.09) 50%, transparent 70%);
+  transform: translateX(-120%);
+}
+.link-row:hover { background: rgba(255, 75, 35, 0.12); transform: translateX(4px); }
+.link-row:hover::after { transform: translateX(120%); transition: transform 0.7s ease; }
+@keyframes slide-in { from { opacity: 0; transform: translateX(-22px); } to { opacity: 1; transform: none; } }
+
+.link-num {
+  font-family: var(--mono);
+  font-weight: 600;
+  font-size: 1.05rem;
+  background: var(--grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.link-body { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.link-title { font-size: 1rem; font-weight: 600; }
+.link-desc { font-size: 0.82rem; color: var(--gray); }
+.link-arrow { width: 20px; height: 20px; color: var(--gray); transition: transform 0.25s, color 0.25s; }
+.link-row:hover .link-arrow { transform: translateX(5px); color: var(--orange); }
+
+/* ============================================================
+   JANELA TERMINAL
+   ============================================================ */
+.terminal-body {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 18px 16px;
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  background: rgba(0, 0, 0, 0.28);
+}
+.prompt { color: var(--orange); }
+.terminal-body code {
+  flex: 1;
+  min-width: 0;
+  overflow-x: auto;
+  white-space: nowrap;
+  color: #eaeaea;
+  scrollbar-width: none;
+}
+.terminal-body code::-webkit-scrollbar { display: none; }
+
+.copy-btn {
+  flex-shrink: 0;
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--white);
+  padding: 7px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  background: transparent;
+  border: 1px solid rgba(255, 75, 35, 0.6);
+  transition: background 0.25s, border-color 0.25s, transform 0.2s;
+}
+.copy-btn:hover { background: rgba(237, 32, 36, 0.18); }
+.copy-btn:active { transform: scale(0.96); }
+.copy-btn.copied { background: var(--grad); border-color: transparent; }
+
+/* ============================================================
+   JANELA SPOTIFY
+   ============================================================ */
+.spotify-frame { display: block; width: 100%; height: 352px; border: 0; }
+.spotify-win .win { animation: halo 5s ease-in-out infinite; }
+@keyframes halo {
+  0%, 100% { box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5), 0 0 0 rgba(40, 200, 64, 0); }
+  50%      { box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5), 0 0 46px rgba(237, 32, 36, 0.22); }
+}
+
+/* ---------- Erro / carregando ---------- */
+.error-text { padding: 22px; font-family: var(--mono); font-size: 0.85rem; color: #ffb4a8; }
+.loading { min-height: 100dvh; display: grid; place-items: center; }
+.spinner {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 3px solid rgba(255, 255, 255, 0.12);
+  border-top-color: var(--orange);
+  animation: spin 0.8s linear infinite;
+}
+
+/* ---------- Toast ---------- */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: calc(24px + env(safe-area-inset-bottom));
+  transform: translate(-50%, 20px);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 50;
+  padding: 12px 18px;
+  border-radius: 999px;
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  background: rgba(20, 20, 20, 0.92);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 75, 35, 0.5);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.5);
+  transition: opacity 0.3s, transform 0.3s;
+}
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+/* ---------- Rodapé ---------- */
+.footer {
+  padding: 18px 20px calc(36px + env(safe-area-inset-bottom));
+  text-align: center;
+  font-size: 0.78rem;
+  color: var(--gray);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.footer a { text-decoration: none; transition: color 0.25s; }
+.footer a:hover { color: var(--orange); }
+
+/* ---------- Celular / tablet: tudo em coluna ---------- */
+@media (max-width: 860px) {
+  .layout { grid-template-columns: minmax(0, 1fr); max-width: 520px; padding: 28px 16px 12px; gap: 18px; }
+  .sidebar { position: static; }
+  .content { gap: 18px; }
+}
+@media (max-width: 360px) {
+  .name { font-size: 1.7rem; }
+  .layout { padding-inline: 12px; }
+}
+
+/* ---------- Movimento reduzido: desliga as animações ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition-duration: 0.01ms !important;
+  }
+}

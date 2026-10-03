@@ -1,0 +1,11 @@
+# O Netlify não traz Trunk/wasm target por padrão, então o comando os instala.
+# Localmente basta: trunk build --release
+[build]
+  publish = "dist"
+  command = """
+  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal &&
+  . "$HOME/.cargo/env" &&
+  rustup target add wasm32-unknown-unknown &&
+  curl -sSfL https://github.com/trunk-rs/trunk/releases/latest/download/trunk-x86_64-unknown-linux-gnu.tar.gz | tar -xzf - &&
+  ./trunk build --release
+  """
