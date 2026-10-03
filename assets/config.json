@@ -12,7 +12,7 @@
   ],
   "links": [
   { "title": "Projetos no GitHub", "desc": "Código aberto e experimentos", "url": "https://github.com/ctfufx777-bit" },
-  { "title": "Instagram", "desc": "Me segue por lá", "url": "https://www.instagram.com/ctf_y090/" 
+  { "title": "Instagram", "desc": "Me segue por lá", "url": "https://www.instagram.com/ctf_y090/"  }
   ],
 
   "command": "git clone https://github.com/ctfufx777-bit/ctf-dev-hub.git",
