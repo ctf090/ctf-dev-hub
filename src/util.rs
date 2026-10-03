@@ -10,7 +10,7 @@ fn err(msg: &str) -> JsValue {
 }
 
 /// Copia texto para a área de transferência (navigator.clipboard.writeText).
-/// Só funciona em HTTPS/localhost, o que o Netlify já oferece.
+/// Só funciona em HTTPS/localhost, o que o GitHub Pages já oferece.
 pub async fn copy_text(text: &str) -> Result<(), JsValue> {
     let window = web_sys::window().ok_or_else(|| err("sem window"))?;
     let navigator: JsValue = window.navigator().into();

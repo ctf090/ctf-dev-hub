@@ -14,7 +14,7 @@ Salvou o arquivo, recarregou a página, mudou. Não precisa recompilar o Rust.
     rustup target add wasm32-unknown-unknown
     cargo install trunk
     trunk serve            # desenvolvimento
-    trunk build --release  # gera a pasta dist/ (o Netlify já faz isso sozinho)
+    trunk build --release  # gera a pasta dist/ (o GitHub Actions faz isso sozinho a cada push)
 
 ## Bolinhas das janelas
 
